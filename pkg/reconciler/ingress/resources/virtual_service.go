@@ -261,12 +261,14 @@ func makeMatch(host, path string, headers map[string]v1alpha1.HeaderMatch, gatew
 		}
 	}
 
+	if match.Headers == nil {
+		match.Headers = make(map[string]*istiov1alpha3.StringMatch, len(headers))
+	}
+
 	for k, v := range headers {
-		match.Headers = map[string]*istiov1alpha3.StringMatch{
-			k: {
-				MatchType: &istiov1alpha3.StringMatch_Exact{
-					Exact: v.Exact,
-				},
+		match.Headers[k] = &istiov1alpha3.StringMatch{
+			MatchType: &istiov1alpha3.StringMatch_Exact{
+				Exact: v.Exact,
 			},
 		}
 	}
